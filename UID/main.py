@@ -1,15 +1,14 @@
 from iconservice import *
-from .scorelib.id_factory import *
 
-TAG = 'HelloWorld'
+TAG = 'UIDGen'
 
 
-class HelloWorld(IconScoreBase, IdFactory):
-    _NAME = "helloworld"
+class UIDGenerator(IconScoreBase):
+    _NAME = "UIDGenerator"
 
     def __init__(self, db: IconScoreDatabase) -> None:
-        name = HelloWorld._NAME
-        self._uid = VarDB(f'{name}_uid', db, int)
+        self._name = UIDGenerator._NAME
+        self._uid = VarDB(f'{self._name}_uid', db, int)
         super().__init__(db)
 
     def on_install(self) -> None:
@@ -21,19 +20,25 @@ class HelloWorld(IconScoreBase, IdFactory):
     # ================================================
     #  Internal methods
     # ================================================
-    def _set_game_id(self) -> int:
-        return self.get_uid()
+    # def _set_game_id(self):
+    #    uid = self._uid.get()
+    #    self._uid.set(uid + 1)
 
     # ================================================
     #  External methods
     # ================================================
     @external
     def set_game_id(self) -> int:
-        return self._set_game_id()
+        self._uid.set(self._uid.get() + 1)
+        return self._uid.get()
+
+    @external(readonly=True)
+    def get_game_id(self) -> int:
+        self._uid.get()
 
     @external(readonly=True)
     def name(self) -> str:
-        return "HelloWorld"
+        return self._name;
 
     @external(readonly=True)
     def hello(self) -> str:

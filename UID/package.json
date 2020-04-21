@@ -1,5 +1,6 @@
+
 {
     "version": "0.0.1",
-    "main_module": "hello_world",
-    "main_score": "HelloWorld"
+    "main_module": "main",
+    "main_score": "UIDGenerator"
 }
