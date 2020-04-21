@@ -6,6 +6,10 @@ TAG = 'UIDGen'
 class UIDGenerator(IconScoreBase):
     _NAME = "UIDGenerator"
 
+    @eventlog(indexed=1)
+    def NewGameStarted(self, game_id: int) -> None:
+        pass
+
     def __init__(self, db: IconScoreDatabase) -> None:
         self._name = UIDGenerator._NAME
         self._uid = VarDB(f'{self._name}_uid', db, int)
@@ -28,9 +32,9 @@ class UIDGenerator(IconScoreBase):
     #  External methods
     # ================================================
     @external
-    def set_game_id(self) -> int:
+    def set_game_id(self):
         self._uid.set(self._uid.get() + 1)
-        return self._uid.get()
+        self.NewGameStarted(self._uid.get())
 
     @external(readonly=True)
     def get_game_id(self) -> int:

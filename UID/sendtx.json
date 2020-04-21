@@ -1,0 +1,14 @@
+{
+  "jsonrpc": "2.0",
+  "method": "icx_call",
+  "params": {
+    "to": "cx73c28d30df00a103b216255ce685a54a91915226",
+    "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
+    "stepLimit": "0x3000000",
+    "dataType": "call",
+    "data": {
+      "method": "set_game_id"
+    }
+  },
+  "id": 1
+}
