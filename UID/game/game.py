@@ -6,6 +6,9 @@ from ..scorelib.id_factory import *
 #  Exception
 # ================================================
 
+class InvalidDifficulty(Exception):
+    pass
+
 
 class GameFactory(IdFactory):
     _NAME = 'GAME_FACTORY'
@@ -23,6 +26,10 @@ class GameFactory(IdFactory):
         game.row[game_id] = 0
         game.status[game_id] = GameStatus.IN_PROGRESS
         return game_id
+
+    def finish_game(self, game_id):
+        game = Game(game_id, self._db)
+        game.status[game_id] = GameStatus.GAME_OVER
 
 
 class GameStatus:
@@ -51,6 +58,15 @@ class Game(object):
         self._status = DictDB(f'{self._name}_{self._GAME_STATUS}', db, value_type=int)
         self._uid = uid
         self._db = db
+
+    # ================================================
+    #  Checks
+    # ================================================
+    @staticmethod
+    def check_difficulty(difficulty: int) -> None:
+        # only supports 3 difficulty levels
+        if not 1 <= difficulty < 4:
+            raise InvalidDifficulty
 
     @property
     def difficulty(self):
