@@ -7,7 +7,7 @@ class UIDGenerator(IconScoreBase):
     _NAME = "UIDGenerator"
 
     @eventlog(indexed=1)
-    def NewGameStarted(self, game_id: int) -> None:
+    def NewGameStarted(self, game_id: object) -> object:
         pass
 
     def __init__(self, db: IconScoreDatabase) -> None:
@@ -24,17 +24,22 @@ class UIDGenerator(IconScoreBase):
     # ================================================
     #  Internal methods
     # ================================================
-    # def _set_game_id(self):
-    #    uid = self._uid.get()
-    #    self._uid.set(uid + 1)
+    def _create_new_game(self, difficulty: str):
+       uid = self._uid.get()
+       self._uid.set(uid + 1)
+       self.NewGameStarted(self._uid.get())
 
     # ================================================
     #  External methods
     # ================================================
     @external
-    def set_game_id(self):
+    def create_new_game(self, difficulty: str):
+        self._create_new_game(difficulty)
         self._uid.set(self._uid.get() + 1)
-        self.NewGameStarted(self._uid.get())
+
+    @external
+    def brick_selected(self, sq: int, row: int, difficulty: str):
+        return
 
     @external(readonly=True)
     def get_game_id(self) -> int:
