@@ -37,7 +37,7 @@ class Game(object):
     # DictDB pointer that will hold the value of the difficulty the user selected when creating a new game
     _DIFFICULTY = 'difficulty'
     # DictDB pointer that will keep track of what row the user is currently on
-    _ROW = 'rows'
+    _LEVEL = 'levels'
     # DictDB pointer that will keep track of the status of the game
     _GAME_STATUS = 'status'
 
@@ -46,9 +46,9 @@ class Game(object):
     # ================================================
     def __init__(self, uid: int, db: IconScoreDatabase):
         self._name = Game._NAME
-        self._difficulty = DictDB(self._DIFF, db, value_type=int)
-        self._row = DictDB(self._ROW, db, value_type=int)
-        self._status = DictDB(self._GAME_STATUS, db, value_type=int)
+        self._difficulty = DictDB(f'{self._name}_{self._DIFFICULTY}', db, value_type=int)
+        self._level = DictDB(f'{self._name}_{self._LEVEL}', db, value_type=int)
+        self._status = DictDB(f'{self._name}_{self._GAME_STATUS}', db, value_type=int)
         self._uid = uid
         self._db = db
 
