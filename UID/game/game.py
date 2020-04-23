@@ -1,5 +1,6 @@
 from iconservice import *
 from ..scorelib.id_factory import *
+from ..scorelib.utils import *
 
 
 # ================================================
@@ -19,17 +20,23 @@ class GameFactory(IdFactory):
         self._name = name
         self._db = db
 
-    def create_game(self, difficulty: int) -> int:
+    def create_game(self, difficulty: int) -> dict:
         game_id = self.get_uid()
         game = Game(game_id, self._db)
         game.difficulty[game_id] = difficulty
-        game.row[game_id] = 0
+        game.level[game_id] = 0
         game.status[game_id] = GameStatus.IN_PROGRESS
         return game_id
 
     def finish_game(self, game_id):
         game = Game(game_id, self._db)
         game.status[game_id] = GameStatus.GAME_OVER
+
+
+class GameDifficulty:
+    EASY = 0
+    MEDIUM = 1
+    HARD = 2
 
 
 class GameStatus:
@@ -68,16 +75,28 @@ class Game(object):
         if not 1 <= difficulty < 4:
             raise InvalidDifficulty
 
+    # ================================================
+    #  Public methods of the Game Class
+    # ================================================
+    def get_game_details(self) -> dict:
+        game_id = self._uid
+        status = self._status[game_id]
+        difficulty = self._difficulty[game_id]
+        return {
+            'game_id': game_id,
+            'level': self._level[game_id],
+            'status': Utils.enum_names(GameStatus)[status],
+            'difficulty': Utils.enum_names(GameDifficulty)[difficulty]
+        }
+
     @property
     def difficulty(self):
         return self._difficulty
 
     @property
-    def row(self):
-        return self._row
+    def level(self):
+        return self._level
 
     @property
     def status(self):
         return self._status
-
-
